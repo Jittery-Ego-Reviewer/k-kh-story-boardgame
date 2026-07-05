@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>家音卡音大挑戰！</title>
+    <title>之音/ts-/大挑戰！</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -91,8 +91,8 @@
 
     <!-- Header -->
     <header class="text-center mb-6 w-full max-w-3xl">
-        <h1 class="text-3xl md:text-4xl font-black text-blue-600 mb-2 drop-shadow-md">🎲 家音卡音大挑戰 🎲</h1>
-        <p class="text-lg text-gray-700 font-bold bg-white inline-block px-4 py-1 rounded-full shadow-sm">家音卡音大挑戰</p>
+        <h1 class="text-3xl md:text-4xl font-black text-blue-600 mb-2 drop-shadow-md">🎲 之音大挑戰 🎲</h1>
+        <p class="text-lg text-gray-700 font-bold bg-white inline-block px-4 py-1 rounded-full shadow-sm">/ts-/之音大挑戰</p>
     </header>
 
     <!-- Setup Screen -->
@@ -154,18 +154,24 @@
             </div>
 
             <div class="bg-blue-50 rounded-xl p-4 mb-6 border-2 border-blue-200">
-                <p class="text-sm font-bold text-gray-500 mb-2">挑戰2：<br>請讀出以下字詞！</p>
-                <div id="challenge-words" class="flex flex-wrap justify-center gap-2 mb-4">
+                <p class="text-sm font-bold text-gray-500 mb-2">挑戰2：故事創作！</p>
+                
+                <div class="text-left text-sm font-bold text-gray-700 mb-4 bg-white p-3 rounded-lg border border-blue-100 shadow-sm leading-relaxed">
+                    <p class="mb-2">✅ <span class="text-green-600">接受挑戰：</span>請運用以下詞語創作 <strong class="text-xl text-red-500">1</strong> 個奇怪的故事</p>
+                    <p>❌ <span class="text-red-500">不接受挑戰：</span>請運用以下詞語創作 <strong class="text-xl text-red-500">2</strong> 個奇怪的故事</p>
+                </div>
+
+                <div id="challenge-words" class="flex flex-wrap justify-center gap-2 mb-2">
                     <!-- Words injected here -->
                 </div>
             </div>
 
             <div class="flex gap-4 justify-center">
-                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-8 rounded-full text-xl transition shadow border-b-4 border-gray-400">
-                    失敗 😭 (-1步)
+                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl text-lg transition shadow border-b-4 border-gray-400 leading-tight">
+                    不接受 / 失敗 😭<br><span class="text-sm font-normal text-red-600">(-1步, 講2個故事)</span>
                 </button>
-                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-xl transition shadow-lg border-b-4 border-green-700">
-                    完成！ 🎉 (+1步)
+                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-lg transition shadow-lg border-b-4 border-green-700 leading-tight">
+                    接受並完成 🎉<br><span class="text-sm font-normal text-green-100">(+1步, 講1個故事)</span>
                 </button>
             </div>
         </div>
@@ -188,13 +194,15 @@
         const availableAvatars = ['🤩', '😈', '🐱', '🐷', '🐸', '👽'];
         
         const speechWords = [
-            '🫘種子', '🌱種植', '粽子', '📄紙張', '👤自己', '紫糯米', '紙巾', '直接', '知道', 
-            '🧀芝士', '💜紫色', '🧻廁紙', '🌵仙人掌', '🧋珍珠奶茶', '🧃果汁', '🐷豬仔', 
-            '🐖🐖兩隻豬', '🐗野豬', '🐥雞仔', '🪳曱甴', '🕷️蜘蛛', '🕸️蜘蛛網', '🦂蠍子', 
-            '👀眼睛', '🕵️偵探', '🚶‍➡️走路', '🧘打坐', '🤳自拍', '🎋富貴竹', '🪡針線', 
-            '💎鑽石', '💍鑽石戒指', '⚽足球', '🪁風箏', '💣炸彈', '⏰鬧鐘', '🍳煎蛋', 
-            '🥪三文治', '🍫朱古力', '🍪朱古力曲奇餅', '🍩朱古力味', '🍇提子', '🫑青椒', 
-            '🥀凋謝', '🧭指南針', '🗽自由神像', '🌳樹枝', '花生醬', '追逐'
+            // 卡音字詞
+            "🎹鋼琴", "🐳鯨魚", "🐧企鵝", "🏇騎馬", "🏌️打哥爾夫球", "⛹️打籃球", "🚵騎單車", "👊拳頭", "🎈氣球", "⚽足球", 
+            "⚾棒球", "🏀籃球", "🎳保齡球", "🏓乒乓球", "🏸羽毛球", "🌍地球", "🥝奇異果", "🚩旗", "🍪曲奇餅", "請求",
+            // 家音字詞
+            "🦒長頸鹿", "🐻‍❄️北極熊", "🦄獨角獸", "🐔雞", "🐣雞仔", "🪳曱甴", "🪲甲蟲", "🤺劍擊", "🦾機械", "🦿機械", 
+            "👸公主", "👮警察", "👷建築工人", "🏋️舉重", "🤸打筋斗", "🎀蝴蝶結", "🛒購物車", "👠高跟鞋", "💄唇膏", "💍鑽石戒指", 
+            "🎮打機", "🧸公仔", "🎧耳機", "🥁打鼓", "🎹鋼琴", "🎸結他", "🔭望遠鏡", "📱手機", "⌨️鍵盤", "📷相機", 
+            "📺電視機", "📎萬字夾", "📏間尺", "✂️鉸剪", "🏌️打哥爾夫球", "🚑救護車", "🍗雞腿", "🍰蛋糕", "🍦雪糕", "🍫朱古力", 
+            "🫚姜", "✈️飛機", "🪂降落傘", "🚦交通燈", "🛟救生圈", "🥚雞蛋"
         ];
 
         const miniChallenges = [
@@ -611,9 +619,10 @@
                 taskText.innerText = rawTask.replace('X', num);
             }
 
-            // Generate exactly 1 random speech word
+            // Generate 4 to 5 random speech words
+            let wordCount = Math.floor(Math.random() * 2) + 4; // Returns 4 or 5
             let shuffledWords = [...speechWords].sort(() => 0.5 - Math.random());
-            currentChallengeWords = shuffledWords.slice(0, 1);
+            currentChallengeWords = shuffledWords.slice(0, wordCount);
             
             wordsContainer.innerHTML = '';
             currentChallengeWords.forEach(word => {
