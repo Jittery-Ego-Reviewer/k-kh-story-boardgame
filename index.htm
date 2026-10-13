@@ -134,7 +134,7 @@
 
             <!-- Controls -->
             <div class="flex flex-col items-center gap-4 w-full">
-                <button id="roll-btn" onclick="takeTurn()" class="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white text-3xl font-black py-4 px-8 rounded-full shadow-lg transform transition active:scale-95 border-b-4 border-blue-800 w-full">
+                <button id="roll-btn" onclick="takeTurn()" class="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white text-3xl font-black py-4 px-8 rounded[...]
                     🎲 擲骰子!
                 </button>
                 <div id="dice-result" class="text-3xl lg:text-4xl font-black text-blue-600 h-16 flex items-center justify-center text-center px-4"></div>
@@ -167,10 +167,10 @@
             </div>
 
             <div class="flex gap-4 justify-center">
-                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl text-lg transition shadow border-b-4 border-gray-400 leading-tight">
+                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl text-lg transition shadow border-b-4 border-gray-400 le[...]
                     不接受 / 失敗 😭<br><span class="text-sm font-normal text-red-600">(-1步, 講2個故事)</span>
                 </button>
-                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-lg transition shadow-lg border-b-4 border-green-700 leading-tight">
+                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-lg transition shadow-lg border-b-4 border-green-700 [...]
                     接受並完成 🎉<br><span class="text-sm font-normal text-green-100">(+1步, 講1個故事)</span>
                 </button>
             </div>
@@ -214,26 +214,51 @@
             "扮猩猩"
         ];
 
-        const hardChallenges = [
+        const CHALLENGES_DB = [
+            "唱一首歌（唔可以係有隻雀仔跌落水）",
+            "猜一個謎語：身體長長，兄弟成雙；只會吃菜，不會喝湯",
+            "猜一個謎語：駝背哥哥，牙齒多多，從你頭上，輕輕走過",
+            "心如刀割（猜一字）",
+            "背誦一首詩（可以是靜夜詩）",
+            "講一個笑話",
+            "説説自己的興趣",
+            "説説最近數學堂學的東西",
+            "説説最近英文堂學的東西",
+            "説説最近中文堂學的東西",
+            "説説最近科學堂學的東西",
+            "跳一隻舞",
+            "擺出三個拍攝姿勢",
+            "暫停一輪",
+            "扮企鵝行路（走5步）",
+            "單腳站立10秒",
+            "分享今天開心的事",
+            "用英文説出三種水果名（不可以是Apple）",
+            "説一個秘密",
+            "原地跳 X 吓（不可以有聲）",
+            "單腳跳 X 吓（不可以有聲）",
+            "合埋眼摸自己個鼻 X 次",
+            "用雙手整 X 種唔同嘅聲音",
+            "扮猩猩",
             "單手整 X 種唔同嘅聲音",
-            "扮整pizza（所有步驟）",
-            "放一樣嘢喺頭上面，保持平衡再行 X 步",
-            "扮螃蟹行 X 步",
+            "扮整pizza（起碼要有3個步驟）",
+            "放一樣東西喺頭上面，保持平衡 X 秒",
+            "扮螃蟹打橫行 X 步",
             "鴨仔跳 X 吓",
-            "扮考試（所有步驟）",
-            "扮刷牙（所有步驟）",
+            "扮刷牙（由洗牙刷開始)",
             "數學題：11 x 11 = ?",
             "數學題：12 x 12 = ?",
             "數學題：13 x 13 = ?",
             "星星跳 X 吓",
             "喺你依家嘅位置成功掉垃圾落垃圾桶入面（1次機會）",
             "喺呢度揾3樣藍色嘅嘢",
+            "喺呢度揾3樣橙色嘅嘢",
             "喺呢度揾3樣紅色嘅嘢",
             "喺呢度揾3樣黃色嘅嘢",
+            "喺呢度揾3樣綠色嘅嘢",
             "轉3個圈行直線",
-            "扮烏龜",
             "下一次見到昆蟲要負責去捉",
-            "唔准眨眼10秒"
+            "唔准眨眼10秒",
+            "吸一啖氣，啊20秒"
         ];
 
         // --- Game State ---
@@ -605,7 +630,7 @@
                 icon.innerText = "🔥";
                 
                 // Pick random hard challenge
-                let rawTask = hardChallenges[Math.floor(Math.random() * hardChallenges.length)];
+                let rawTask = CHALLENGES_DB[Math.floor(Math.random() * CHALLENGES_DB.length)];
                 let num = Math.floor(Math.random() * 8) + 3; // 3 to 10
                 taskText.innerText = rawTask.replace('X', num);
             } else {
