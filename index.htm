@@ -134,7 +134,7 @@
 
             <!-- Controls -->
             <div class="flex flex-col items-center gap-4 w-full">
-                <button id="roll-btn" onclick="takeTurn()" class="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white text-3xl font-black py-4 px-8 rounded-full[...]
+                <button id="roll-btn" onclick="takeTurn()" class="bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 active:scale-95 text-white text-3xl font-black py-4 px-8 rounded-full shadow-lg transform transition">
                     🎲 擲骰子!
                 </button>
                 <div id="dice-result" class="text-3xl lg:text-4xl font-black text-blue-600 h-16 flex items-center justify-center text-center px-4"></div>
@@ -167,10 +167,10 @@
             </div>
 
             <div class="flex gap-4 justify-center">
-                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl text-lg transition shadow border-b-4 border-gray-400 le[...]
+                <button onclick="resolveChallenge(false)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl text-lg transition shadow-md border-b-4 border-gray-400 leading-tight">
                     不接受 / 失敗 😭<br><span class="text-sm font-normal text-red-600">(-1步, 講2個故事)</span>
                 </button>
-                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-lg transition shadow-lg border-b-4 border-green-700 [...]
+                <button onclick="resolveChallenge(true)" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-lg transition shadow-md border-b-4 border-green-700 leading-tight">
                     接受並完成 🎉<br><span class="text-sm font-normal text-green-100">(+1步, 講1個故事)</span>
                 </button>
             </div>
@@ -196,11 +196,11 @@
         const speechWords = [
             "🎹鋼琴", "🐳鯨魚", "🐧企鵝", "🏇騎馬", "🏌️打哥爾夫球", "⛹️打籃球", "🚵騎單車", "👊拳頭", "🎈氣球", "⚽足球",
             "⚾棒球", "🏀籃球", "🎳保齡球", "🏓乒乓球", "🏸羽毛球", "🌍地球", "🥝奇異果", "🚩旗", "🍪曲奇餅", "請求", "生日卡", "聖誕卡", "卡通片", "坑渠",
-            "🦒長頸鹿", "🐻‍❄️北極熊", "🦄獨角獸", "🐔雞", "🐣雞仔", "🪳曱甴", "🪲甲蟲", "🤺劍擊", "機械", "機械",
-            "👸公主", "👮警察", "👷建築工人", "🏋️舉重", "🤸打筋斗", "🎀蝴蝶結", "🛒購物車", "👠高跟鞋", "💄唇膏", "💍鑽石戒指",
-            "🎮打機", "🧸公仔", "🎧耳機", "🥁打鼓", "🎹鋼琴", "🎸結他", "🔭望遠鏡", "📱手機", "⌨️鍵盤", "📷相機",
-            "📺電視機", "📎萬字夾", "📏間尺", "✂️鉸剪", "🏌️打哥爾夫球", "🚑救護車", "🍗雞腿", "🍰蛋糕", "🍦雪糕", "🍫朱古力",
-            "🫚姜", "✈️飛機", "🪂降落傘", "🚦交通燈", "🛟救生圈", "🥚雞蛋", "指甲", "鍵盤", "身體健康", "成功", "功夫", "驚訝", "黃金", "狗糧", "記事本", "高", "舊"
+            "🦒長頸鹿", "🐻‍❄️北極熊", "🦄獨角獸", "🐔雞", "🐣雞仔", "🪳曱甴", "🪲甲蟲", "🤺劍擊", "機械", "公主",
+            "👮警察", "👷建築工人", "🏋️舉重", "🤸打筋斗", "🎀蝴蝶結", "🛒購物車", "👠高跟鞋", "💄唇膏", "💍鑽石戒指",
+            "🎮打機", "🧸公仔", "🎧耳機", "🥁打鼓", "🎸結他", "🔭望遠鏡", "📱手機", "⌨️鍵盤", "📷相機",
+            "📺電視機", "📎萬字夾", "📏間尺", "✂️鉸剪", "🚑救護車", "🍗雞腿", "🍰蛋糕", "🍦雪糕", "🍫朱古力",
+            "🫚姜", "✈️飛機", "🪂降落傘", "🚦交通燈", "🛟救生圈", "🥚雞蛋", "指甲", "身體健康", "成功", "功夫", "驚訝", "黃金", "狗糧", "記事本", "高", "舊"
         ];
 
         const miniChallenges = [
@@ -269,17 +269,23 @@
         let currentChallengeWords = [];
         let trapBlocks = [];
 
-        // --- Utility Functions ---
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
         function generateTrapBlocks() {
             const candidates = [];
-            // Generate possible blocks: 2 to 63, NOT divisible by 2 or 5
             for (let i = 2; i <= 63; i++) {
                 if (i % 2 !== 0 && i % 5 !== 0) {
                     candidates.push(i);
                 }
             }
-            // Shuffle and randomly select exactly 11 blocks
-            const shuffled = candidates.sort(() => 0.5 - Math.random());
+            const shuffled = shuffleArray(candidates);
             trapBlocks = shuffled.slice(0, 11);
         }
 
@@ -291,7 +297,7 @@
                     if (AudioContext) audioCtx = new AudioContext();
                 }
                 if (audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume();
+                    audioCtx.resume().catch(() => {});
                 }
             } catch (e) {
                 console.warn("Audio context could not be initialized:", e);
@@ -299,8 +305,8 @@
         }
 
         function playSound(type) {
-            if (!audioCtx || audioCtx.state !== 'running') return;
             try {
+                if (!audioCtx || audioCtx.state !== 'running') return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.connect(gain);
@@ -330,7 +336,7 @@
                     osc.start(now); osc.stop(now + 0.4);
                 } else if (type === 'win') {
                     osc.type = 'sine';
-                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C E G C
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, i) => {
                         const o = audioCtx.createOscillator();
                         const g = audioCtx.createGain();
@@ -357,7 +363,7 @@
                     osc.start(now); osc.stop(now + 0.3);
                 }
             } catch (e) {
-                // Ignore audio playback errors quietly
+                // Ignore audio errors quietly
             }
         }
 
@@ -377,7 +383,7 @@
 
             tempAvailableAvatars.forEach(avatar => {
                 const btn = document.createElement('button');
-                btn.className = "text-5xl hover:scale-110 transition transform";
+                btn.className = "text-5xl hover:scale-110 transition transform p-2 rounded-xl border-2 border-transparent hover:border-blue-300";
                 btn.innerText = avatar;
                 btn.onclick = () => chooseAvatar(avatar);
                 container.appendChild(btn);
@@ -397,7 +403,7 @@
         function startGame() {
             initAudio();
             players = [];
-            for(let i = 0; i < numPlayers; i++) {
+            for (let i = 0; i < numPlayers; i++) {
                 players.push({
                     id: i,
                     avatar: selectedAvatars[i],
@@ -405,7 +411,6 @@
                 });
             }
             
-            // Randomly select trap blocks for this session
             generateTrapBlocks(); 
 
             document.getElementById('setup-screen').classList.add('hidden');
@@ -415,45 +420,40 @@
             buildBoard();
             updateStatusUI();
             placeAvatars();
+            
+            unlockTurn();
         }
 
         function buildBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
             
-            // Zig-Zag layout: 64 to 1
             for (let row = 7; row >= 0; row--) {
                 for (let col = 0; col < 8; col++) {
                     let cellNum;
                     if (row % 2 === 0) {
-                        cellNum = row * 8 + col + 1; // Left to right
+                        cellNum = row * 8 + col + 1;
                     } else {
-                        cellNum = row * 8 + (7 - col) + 1; // Right to left
+                        cellNum = row * 8 + (7 - col) + 1;
                     }
 
                     const cell = document.createElement('div');
                     cell.className = 'cell';
                     cell.id = `cell-${cellNum}`;
                     
-                    // Priority check: Trap rule overrides multiple of 2 & 5 visually
                     if (trapBlocks.includes(cellNum)) {
-                        cell.classList.add('cell-trap');
-                        cell.classList.add('border-2', 'border-purple-400');
+                        cell.classList.add('cell-trap', 'border-2', 'border-purple-400');
                     } else if (cellNum > 1 && cellNum % 5 === 0) {
-                        cell.classList.add('cell-hard');
-                        cell.classList.add('border-2', 'border-red-300');
+                        cell.classList.add('cell-hard', 'border-2', 'border-red-300');
                     } else if (cellNum > 1 && cellNum % 2 === 0) {
-                        cell.classList.add('cell-mini');
-                        cell.classList.add('border-2', 'border-yellow-400');
+                        cell.classList.add('cell-mini', 'border-2', 'border-yellow-400');
                     }
 
-                    // Number label
                     const label = document.createElement('span');
                     label.className = 'cell-number';
                     label.innerText = cellNum;
                     cell.appendChild(label);
 
-                    // Add markers for challenges
                     if (trapBlocks.includes(cellNum)) {
                         const icon = document.createElement('span');
                         icon.innerHTML = '🔙';
@@ -477,16 +477,14 @@
         }
 
         function updateStatusUI() {
-            if(players.length > 0) {
+            if (players.length > 0 && players[currentPlayerIndex]) {
                 document.getElementById('current-turn-display').innerText = players[currentPlayerIndex].avatar;
             }
         }
 
         function placeAvatars() {
-            // Remove all current avatars from board
             document.querySelectorAll('.avatar').forEach(el => el.remove());
             
-            // Place them based on positions
             players.forEach(p => {
                 const cell = document.getElementById(`cell-${p.position}`);
                 if (cell) {
@@ -504,77 +502,86 @@
         // --- Core Game Logic ---
         async function takeTurn() {
             if (isMoving) return;
-            initAudio();
             isMoving = true;
             
             const btn = document.getElementById('roll-btn');
             const resultDisplay = document.getElementById('dice-result');
             
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            resultDisplay.classList.add('dice-anim');
-            resultDisplay.innerText = '';
-            
-            // Fake rolling
-            let roll = 1;
-            for(let i=0; i<10; i++) {
-                playSound('dice');
-                roll = Math.floor(Math.random() * 6) + 1;
-                resultDisplay.innerText = `🎲 ${roll}`;
-                await delay(50);
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
             }
             
-            resultDisplay.classList.remove('dice-anim');
-            resultDisplay.innerText = `得 ${roll} 步!`;
-            await delay(500);
-
-            // Move player
-            const player = players[currentPlayerIndex];
-            const targetPos = Math.min(64, player.position + roll);
-            
-            // Step by step animation
-            while (player.position < targetPos) {
-                player.position++;
-                placeAvatars();
-                playSound('step');
-                
-                // Add bounce to current moving avatar
-                const activeAvatar = document.getElementById(`avatar-${player.id}`);
-                if(activeAvatar) {
-                    activeAvatar.classList.remove('bounce');
-                    void activeAvatar.offsetWidth; // trigger reflow
-                    activeAvatar.classList.add('bounce');
+            try {
+                initAudio();
+                if (resultDisplay) {
+                    resultDisplay.classList.add('dice-anim');
+                    resultDisplay.innerText = '';
                 }
                 
-                updateStatusUI();
-                await delay(300);
-            }
+                let roll = 1;
+                for (let i = 0; i < 10; i++) {
+                    playSound('dice');
+                    roll = Math.floor(Math.random() * 6) + 1;
+                    if (resultDisplay) resultDisplay.innerText = `🎲 ${roll}`;
+                    await delay(50);
+                }
+                
+                if (resultDisplay) {
+                    resultDisplay.classList.remove('dice-anim');
+                    resultDisplay.innerText = `得 ${roll} 步!`;
+                }
+                await delay(500);
 
-            // Check Win Condition
-            if (player.position >= 64) {
-                playSound('win');
-                document.getElementById('win-message').innerText = `${player.avatar} 贏得了探險！`;
-                document.getElementById('win-modal').classList.remove('hidden');
-                return; // End game
-            }
+                const player = players[currentPlayerIndex];
+                if (!player) {
+                    unlockTurn();
+                    return;
+                }
 
-            // Check space events
-            await checkSpaceEvent(player);
+                const targetPos = Math.min(64, player.position + roll);
+                
+                while (player.position < targetPos) {
+                    player.position++;
+                    placeAvatars();
+                    playSound('step');
+                    
+                    const activeAvatar = document.getElementById(`avatar-${player.id}`);
+                    if (activeAvatar) {
+                        activeAvatar.classList.remove('bounce');
+                        void activeAvatar.offsetWidth;
+                        activeAvatar.classList.add('bounce');
+                    }
+                    
+                    updateStatusUI();
+                    await delay(300);
+                }
+
+                if (player.position >= 64) {
+                    playSound('win');
+                    document.getElementById('win-message').innerText = `${player.avatar} 贏得了探險！`;
+                    document.getElementById('win-modal').classList.remove('hidden');
+                    isMoving = false;
+                    return;
+                }
+
+                await checkSpaceEvent(player);
+            } catch (err) {
+                console.error("Error during turn processing:", err);
+                unlockTurn();
+            }
         }
 
         async function checkSpaceEvent(player) {
             const pos = player.position;
             
-            // Check Trap rule first
             if (trapBlocks.includes(pos)) {
                 await triggerBackwardTrap(player);
-            } else if (pos % 5 === 0) {
-                // Hard Challenge
+            } else if (pos > 1 && pos % 5 === 0) {
                 triggerChallenge(player, 'hard');
-            } else if (pos % 2 === 0) {
-                // Mini Challenge
+            } else if (pos > 1 && pos % 2 === 0) {
                 triggerChallenge(player, 'mini');
             } else {
-                // Empty space, next turn
                 nextTurn();
             }
         }
@@ -582,21 +589,22 @@
         async function triggerBackwardTrap(player) {
             playSound('fail');
             const resultDisplay = document.getElementById('dice-result');
-            resultDisplay.innerText = `踩中陷阱 ${player.position}！後退 4 步！`;
-            resultDisplay.classList.add('text-red-600');
+            if (resultDisplay) {
+                resultDisplay.innerText = `踩中陷阱 ${player.position}！後退 4 步！`;
+                resultDisplay.classList.add('text-red-600');
+            }
             
             await delay(1500);
             
             const targetPos = Math.max(1, player.position - 4);
             
-            // Step by step backward animation
             while (player.position > targetPos) {
                 player.position--;
                 placeAvatars();
                 playSound('step');
                 
                 const activeAvatar = document.getElementById(`avatar-${player.id}`);
-                if(activeAvatar) {
+                if (activeAvatar) {
                     activeAvatar.classList.remove('bounce');
                     void activeAvatar.offsetWidth;
                     activeAvatar.classList.add('bounce');
@@ -606,9 +614,10 @@
                 await delay(300);
             }
             
-            resultDisplay.classList.remove('text-red-600');
+            if (resultDisplay) {
+                resultDisplay.classList.remove('text-red-600');
+            }
             
-            // Proceed to the next turn instead of triggering another event to prevent infinite trap loops
             nextTurn();
         }
 
@@ -626,24 +635,21 @@
                 title.className = "text-3xl font-black text-red-600 mb-4 tracking-wide";
                 icon.innerText = "🔥";
                 
-                // Pick random hard challenge
                 let rawTask = CHALLENGES_DB[Math.floor(Math.random() * CHALLENGES_DB.length)];
-                let num = Math.floor(Math.random() * 8) + 3; // 3 to 10
-                taskText.innerText = rawTask.replace('X', num);
+                let num = Math.floor(Math.random() * 8) + 3;
+                taskText.innerText = rawTask.replaceAll('X', num);
             } else {
                 title.innerText = "⚡ 小挑戰！";
                 title.className = "text-3xl font-black text-yellow-600 mb-4 tracking-wide";
                 icon.innerText = "⚡";
                 
-                // Pick random mini challenge
                 let rawTask = miniChallenges[Math.floor(Math.random() * miniChallenges.length)];
-                let num = Math.floor(Math.random() * 10) + 1; // 1 to 10
-                taskText.innerText = rawTask.replace('X', num);
+                let num = Math.floor(Math.random() * 10) + 1;
+                taskText.innerText = rawTask.replaceAll('X', num);
             }
 
-            // Generate 4 to 5 random speech words
-            let wordCount = Math.floor(Math.random() * 2) + 4; // Returns 4 or 5
-            let shuffledWords = [...speechWords].sort(() => 0.5 - Math.random());
+            let wordCount = Math.floor(Math.random() * 2) + 4;
+            let shuffledWords = shuffleArray(speechWords);
             currentChallengeWords = shuffledWords.slice(0, wordCount);
             
             wordsContainer.innerHTML = '';
@@ -659,70 +665,84 @@
 
         async function resolveChallenge(success) {
             const modal = document.getElementById('challenge-modal');
-            modal.classList.add('hidden');
+            if (modal) modal.classList.add('hidden');
             
             const player = players[currentPlayerIndex];
+            if (!player) {
+                nextTurn();
+                return;
+            }
             
+            const resultDisplay = document.getElementById('dice-result');
             if (success) {
                 playSound('success');
                 player.position = Math.min(64, player.position + 1);
-                document.getElementById('dice-result').innerText = `獎勵 +1 步!`;
+                if (resultDisplay) resultDisplay.innerText = `獎勵 +1 步!`;
             } else {
                 playSound('fail');
                 player.position = Math.max(1, player.position - 1);
-                document.getElementById('dice-result').innerText = `後退 -1 步!`;
+                if (resultDisplay) resultDisplay.innerText = `後退 -1 步!`;
             }
             
             placeAvatars();
             updateStatusUI();
             
-            // Add bounce animation
             const activeAvatar = document.getElementById(`avatar-${player.id}`);
-            if(activeAvatar) {
+            if (activeAvatar) {
+                activeAvatar.classList.remove('bounce');
+                void activeAvatar.offsetWidth;
                 activeAvatar.classList.add('bounce');
             }
 
             await delay(1000);
             
-            // Check win after reward
             if (player.position >= 64) {
                 playSound('win');
                 document.getElementById('win-message').innerText = `${player.avatar} 贏得了探險！`;
                 document.getElementById('win-modal').classList.remove('hidden');
+                isMoving = false;
                 return;
             }
 
             nextTurn();
         }
 
+        function unlockTurn() {
+            isMoving = false;
+            const btn = document.getElementById('roll-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
         function nextTurn() {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
             updateStatusUI();
-            document.getElementById('dice-result').innerText = '';
-            document.getElementById('roll-btn').classList.remove('opacity-50', 'cursor-not-allowed');
-            isMoving = false;
+            const resultDisplay = document.getElementById('dice-result');
+            if (resultDisplay) resultDisplay.innerText = '';
+            unlockTurn();
         }
 
         function resetGame() {
-            // Reset screens
             document.getElementById('win-modal').classList.add('hidden');
+            document.getElementById('challenge-modal').classList.add('hidden');
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('flex');
             document.getElementById('setup-screen').classList.remove('hidden');
             document.getElementById('player-count-selection').classList.remove('hidden');
             document.getElementById('avatar-selection').classList.add('hidden');
             
-            // Clear current avatars & variables
             selectedAvatars = [];
             tempAvailableAvatars = [...availableAvatars];
             currentPlayerIndex = 0;
             isMoving = false;
             
-            // Clear board
             document.getElementById('board').innerHTML = '';
-            document.getElementById('dice-result').innerText = '';
+            const resultDisplay = document.getElementById('dice-result');
+            if (resultDisplay) resultDisplay.innerText = '';
+            unlockTurn();
         }
-
     </script>
 </body>
 </html>
